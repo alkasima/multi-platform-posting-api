@@ -42,7 +42,8 @@ platforms are still attempted — one failure never stops the batch.
 | Clear errors | HTTP errors are converted into short, readable messages (e.g. `HTTP 401 - ...`). |
 | Credentials via env | No secret is committed; `.env.example` documents every variable. |
 | Interactive docs | Swagger UI at `/docs`, ReDoc at `/redoc`. |
-| Test suite | 35 unit and integration tests; all HTTP calls are mocked (no network needed). |
+| Designed dashboard | Dark landing page with live platform status, character counter and syntax-highlighted responses — no build step or CDN. |
+| Test suite | 36 unit and integration tests; all HTTP calls are mocked (no network needed). |
 | Demo mode | `DEMO_MODE=true` simulates a full multi-platform run without credentials. |
 
 ---
@@ -86,6 +87,10 @@ every result is public.
 │   │   ├── telegram.py
 │   │   ├── discord.py
 │   │   └── simulated.py            # Demo-only stand-in (DEMO_MODE=true)
+│   ├── static/                     # Landing page: HTML/CSS/JS, no build step
+│   │   ├── index.html
+│   │   ├── styles.css
+│   │   └── app.js
 │   └── services/
 │       └── posting_service.py      # Fans out to all platforms, collects results
 ├── tests/
@@ -460,7 +465,7 @@ pytest -q
 ```
 
 ```
-35 passed
+36 passed
 ```
 
 The suite covers:
@@ -521,9 +526,9 @@ Tests never touch the network and never need real credentials.
 
 | File | Description |
 | --- | --- |
-| `screenshots/01-landing-page.jpg` | Landing page with the interactive demo form. |
+| `screenshots/01-landing-page.jpg` | Landing page with live platform status and the interactive demo form. |
 | `screenshots/02-swagger-ui.jpg` | Auto-generated Swagger UI at `/docs`. |
-| `screenshots/03-demo-response.jpg` | Full JSON response rendered by the demo form. |
+| `screenshots/03-demo-response.jpg` | Full JSON response rendered with syntax highlighting. |
 | `logs/health.json` | Health endpoint output. |
 | `logs/platforms_no_credentials.json` | Platform configuration status. |
 | `logs/sample_response_demo_mode.json` | Full successful multi-platform response. |

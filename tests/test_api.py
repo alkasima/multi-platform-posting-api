@@ -120,3 +120,17 @@ async def test_openapi_schema_is_served(client):
     schema = response.json()
     assert "/posting" in schema["paths"]
     assert "PostResponse" in schema["components"]["schemas"]
+
+
+async def test_landing_page_and_static_assets_are_served(client):
+    transport = httpx.ASGITransport(app=app)
+    async with httpx.AsyncClient(transport=transport, base_url="http://test") as http:
+        page = await http.get("/")
+        css = await http.get("/static/styles.css")
+        js = await http.get("/static/app.js")
+
+    assert page.status_code == 200
+    assert "PostPilot" in page.text
+    assert 'id="demo-form"' in page.text
+    assert css.status_code == 200
+    assert js.status_code == 200
