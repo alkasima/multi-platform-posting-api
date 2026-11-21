@@ -1,0 +1,1 @@
+{"success":false,"error":"validation_error","details":[{"field":"message","message":"Value error, message must contain exactly one CTA link (found 0)","type":"value_error"}]}
