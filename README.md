@@ -101,6 +101,8 @@ every result is public.
 │   ├── test_posting_service.py
 │   └── test_api.py
 ├── screenshots/                    # UI and response screenshots
+├── scripts/
+│   └── smoke_test.py               # Manual end-to-end checks against a running server
 ├── logs/                           # Real responses captured from a local run
 ├── .env.example                    # Every environment variable, documented
 ├── requirements.txt
@@ -481,6 +483,18 @@ The suite covers:
   platform status and the OpenAPI schema.
 
 Tests never touch the network and never need real credentials.
+
+### Manual smoke test
+
+With the server running in another terminal:
+
+```bash
+python scripts/smoke_test.py
+```
+
+It checks `/health` and seven `/posting` cases (one valid, six invalid) and exits
+with a non-zero status if anything fails. Pass a different base URL as the first
+argument to test a remote deployment.
 
 ---
 
