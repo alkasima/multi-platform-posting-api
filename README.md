@@ -9,10 +9,28 @@ platforms are still attempted — one failure never stops the batch.
 
 ![Landing page with the built-in demo form](screenshots/01-landing-page.jpg)
 
+## Verified live
+
+Both integrations below were exercised against the **real APIs** on 21 November
+2026 through `POST /posting` — these are live posts, not mock data:
+
+| Platform | Result | Live URL |
+| --- | --- | --- |
+| **Bluesky** | ✅ Posted | https://bsky.app/profile/alkasima.bsky.social/post/3n2tk4gec6a2t |
+| **DEV Community** | ✅ Published | https://dev.to/kasim_abubakarjajere_d0d/testing-the-postpilot-multi-platform-posting-api-51jg |
+
+![Live run with real Bluesky and DEV Community posts](screenshots/05-real-bluesky-devto.jpg)
+
+Both were verified independently: Bluesky's public `app.bsky.feed.getPostThread`
+returned the same record, and the DEV Community article API returned the same
+title and body with HTTP 200. The other three platforms report
+`Missing configuration` until credentials are added.
+
 ---
 
 ## Table of contents
 
+- [Verified live](#verified-live)
 - [Features](#features)
 - [Platforms](#platforms)
 - [Project structure](#project-structure)
@@ -44,19 +62,20 @@ platforms are still attempted — one failure never stops the batch.
 | Interactive docs | Swagger UI at `/docs`, ReDoc at `/redoc`. |
 | Designed dashboard | Dark landing page with live platform status, character counter and syntax-highlighted responses — no build step or CDN. |
 | Test suite | 36 unit and integration tests; all HTTP calls are mocked (no network needed). |
+| Live-verified | Real Bluesky and DEV Community posts created through the API — see [Verified live](#verified-live). |
 | Demo mode | `DEMO_MODE=true` simulates a full multi-platform run without credentials. |
 
 ---
 
 ## Platforms
 
-| Platform | Type | Credentials | Public access | Official docs |
-| --- | --- | --- | --- | --- |
-| **Bluesky** | Micro-blogging | Handle + app password | Yes — public profile permalink | [AT Protocol docs](https://docs.bsky.app/docs/advanced-guides/posts) |
-| **DEV Community** | Blogging / dev network | API key | Yes — public article URL | [Forem API](https://developers.forem.com/api/v1#operation/createArticle) |
-| **Mastodon** | Fediverse micro-blogging | Instance URL + access token (`write:statuses`) | Yes — public status URL | [Mastodon API](https://docs.joinmastodon.org/methods/statuses/#create) |
-| **Telegram** | Channel broadcasting | Bot token + chat ID | Yes if the channel has a public username; otherwise no | [Bot API](https://core.telegram.org/bots/api#sendmessage) |
-| **Discord** | Community chat | Webhook URL | No — channel membership required | [Webhook docs](https://discord.com/developers/docs/resources/webhook#execute-webhook) |
+| Platform | Type | Credentials | Public access | Live check | Official docs |
+| --- | --- | --- | --- | --- | --- |
+| **Bluesky** | Micro-blogging | Handle + app password | Yes — public profile permalink | ✅ 21 Nov 2026 | [AT Protocol docs](https://docs.bsky.app/docs/advanced-guides/posts) |
+| **DEV Community** | Blogging / dev network | API key | Yes — public article URL | ✅ 21 Nov 2026 | [Forem API](https://developers.forem.com/api/v1#operation/createArticle) |
+| **Mastodon** | Fediverse micro-blogging | Instance URL + access token (`write:statuses`) | Yes — public status URL | — | [Mastodon API](https://docs.joinmastodon.org/methods/statuses/#create) |
+| **Telegram** | Channel broadcasting | Bot token + chat ID | Yes if the channel has a public username; otherwise no | — | [Bot API](https://core.telegram.org/bots/api#sendmessage) |
+| **Discord** | Community chat | Webhook URL | No — channel membership required | — | [Webhook docs](https://discord.com/developers/docs/resources/webhook#execute-webhook) |
 
 **Why these five?** All of them offer free API access, publish real content and
 have official documentation, so an evaluator can verify the integration without
@@ -334,10 +353,11 @@ rejected a repeated title with
 recorded it as a failed result and still published to Bluesky — exactly the
 required behaviour.
 
-#### Partial failure response (real run, one platform rejected the message)
+#### Partial failure response (illustrative)
 
-The `401` from DEV Community is captured per platform while the other four
-still succeed. This is the behaviour required by the assignment.
+A single platform rejection is captured per platform while the other four still
+succeed. This is the behaviour required by the assignment, and it was observed
+live when DEV Community rejected a repeated title.
 
 ```json
 {
