@@ -296,6 +296,26 @@ disappears.
 }
 ```
 
+#### Real integration (Bluesky, live)
+
+A real post created through the API on 2026-11-21 and verified with Bluesky's
+public API (`app.bsky.feed.getPostThread` returned the same record):
+
+```json
+{
+  "platform": "Bluesky",
+  "status": "success",
+  "posted_url": "https://bsky.app/profile/alkasima.bsky.social/post/3n2tjm5husk2p",
+  "public_access": true,
+  "date": "2026-11-21",
+  "time": "16:31:26",
+  "error": null
+}
+```
+
+The other four platforms in that run reported `Missing configuration`, which is
+the expected graceful behaviour until their credentials are added.
+
 #### Partial failure response (real run, one platform rejected the message)
 
 The `401` from DEV Community is captured per platform while the other four
@@ -543,9 +563,11 @@ argument to test a remote deployment.
 | `screenshots/01-landing-page.jpg` | Landing page with live platform status and the interactive demo form. |
 | `screenshots/02-swagger-ui.jpg` | Auto-generated Swagger UI at `/docs`. |
 | `screenshots/03-demo-response.jpg` | Full JSON response rendered with syntax highlighting. |
+| `screenshots/04-real-bluesky-post.jpg` | Live Bluesky post created by the API with real credentials. |
 | `logs/health.json` | Health endpoint output. |
 | `logs/platforms_no_credentials.json` | Platform configuration status. |
 | `logs/sample_response_demo_mode.json` | Full successful multi-platform response. |
+| `logs/sample_response_bluesky_real.json` | Real Bluesky success plus missing-config failures for the rest. |
 | `logs/sample_response_no_credentials.json` | Graceful per-platform failures. |
 | `logs/sample_validation_error.json` | `422` response for a missing link. |
 | `logs/sample_validation_two_links.json` | `422` response for two links. |
