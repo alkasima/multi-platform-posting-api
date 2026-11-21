@@ -23,9 +23,11 @@ class DevToPlatform(BasePlatform):
             context=f"{self.display_name} article creation",
             headers={"api-key": self.settings.devto_api_key},
             json={
-                "title": self.make_title(message, cta_url),
-                "body_markdown": message,
-                "published": True,
+                "article": {
+                    "title": self.make_title(message, cta_url),
+                    "body_markdown": message,
+                    "published": True,
+                }
             },
         )
 

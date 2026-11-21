@@ -1,5 +1,7 @@
 """Unit tests for each platform integration (all HTTP calls are mocked)."""
 
+import json
+
 import httpx
 import pytest
 import respx
@@ -63,7 +65,10 @@ async def test_devto_publish(settings):
     assert result.posted_url == "https://dev.to/alice/post"
     request = route.calls.last.request
     assert request.headers["api-key"] == "fake-devto-key"
-    assert b"body_markdown" in request.content
+    body = json.loads(request.content)
+    assert body["article"]["body_markdown"] == MESSAGE
+    assert body["article"]["published"] is True
+    assert body["article"]["title"]
 
 
 @respx.mock

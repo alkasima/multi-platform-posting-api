@@ -296,25 +296,43 @@ disappears.
 }
 ```
 
-#### Real integration (Bluesky, live)
+#### Real integrations (Bluesky + DEV Community, live)
 
-A real post created through the API on 2026-11-21 and verified with Bluesky's
-public API (`app.bsky.feed.getPostThread` returned the same record):
+A real run on 2026-11-21 with live credentials for two platforms:
 
 ```json
 {
   "platform": "Bluesky",
   "status": "success",
-  "posted_url": "https://bsky.app/profile/alkasima.bsky.social/post/3n2tjm5husk2p",
+  "posted_url": "https://bsky.app/profile/alkasima.bsky.social/post/3n2tk4gec6a2t",
   "public_access": true,
   "date": "2026-11-21",
-  "time": "16:31:26",
+  "time": "16:40:32",
+  "error": null
+},
+{
+  "platform": "DEV Community",
+  "status": "success",
+  "posted_url": "https://dev.to/kasim_abubakarjajere_d0d/testing-the-postpilot-multi-platform-posting-api-51jg",
+  "public_access": true,
+  "date": "2026-11-21",
+  "time": "16:40:32",
   "error": null
 }
 ```
 
-The other four platforms in that run reported `Missing configuration`, which is
+Both were verified independently: Bluesky's public `app.bsky.feed.getPostThread`
+returned the same record, and the DEV Community article API returned the same
+title and body with HTTP 200.
+
+The other three platforms in that run reported `Missing configuration`, which is
 the expected graceful behaviour until their credentials are added.
+
+**Upstream errors are reported per platform.** During testing, DEV Community
+rejected a repeated title with
+`HTTP 422 - Title has already been used in the last five minutes`. The app
+recorded it as a failed result and still published to Bluesky — exactly the
+required behaviour.
 
 #### Partial failure response (real run, one platform rejected the message)
 
@@ -564,10 +582,12 @@ argument to test a remote deployment.
 | `screenshots/02-swagger-ui.jpg` | Auto-generated Swagger UI at `/docs`. |
 | `screenshots/03-demo-response.jpg` | Full JSON response rendered with syntax highlighting. |
 | `screenshots/04-real-bluesky-post.jpg` | Live Bluesky post created by the API with real credentials. |
+| `screenshots/05-real-bluesky-devto.jpg` | Live run with real Bluesky and DEV Community successes. |
 | `logs/health.json` | Health endpoint output. |
 | `logs/platforms_no_credentials.json` | Platform configuration status. |
 | `logs/sample_response_demo_mode.json` | Full successful multi-platform response. |
 | `logs/sample_response_bluesky_real.json` | Real Bluesky success plus missing-config failures for the rest. |
+| `logs/sample_response_bluesky_devto_real.json` | Real Bluesky and DEV Community successes from the same request. |
 | `logs/sample_response_no_credentials.json` | Graceful per-platform failures. |
 | `logs/sample_validation_error.json` | `422` response for a missing link. |
 | `logs/sample_validation_two_links.json` | `422` response for two links. |
